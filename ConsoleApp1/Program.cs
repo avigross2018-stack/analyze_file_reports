@@ -40,6 +40,7 @@ namespace MyFirstProject
             return null;
         }
 
+
         static List<string> CleanUnFormatLines(List<string> fileContent)
         {
             List<string> cleanData = new List<string>();
@@ -55,17 +56,20 @@ namespace MyFirstProject
             return cleanData;
         }
 
+
         static void ProcessReports(
                                 List<string> fileContent,
                                 string[] unitName,
                                 string[] reportType,
                                 int[] priority,
                                 double[] score,
-                                string[] status)
+                                string[] status,
+                                out int listLen)
         {
             List<string> cleanData = CleanUnFormatLines(fileContent);
             List<string> tempLine = new List<string>();
             int index = 0;
+            
             foreach(string line in cleanData)
             {
                 tempLine = [.. line.Split(",")];
@@ -103,10 +107,47 @@ namespace MyFirstProject
                 status[index] = stat.ToLower();
 
                 index ++;
+                
             }
-
+            listLen = index;
             System.Console.WriteLine($"{index + 1} processed record Valid.");
         }
+
+
+        static void CalculateAverage(double[] score,
+                                        int listLen)
+        {
+            double total = 0;
+            foreach (var item in score)
+            {
+                total += item;
+            }
+            double avg = total / listLen;
+            System.Console.WriteLine($"Average {avg:F2}");
+        }
+
+
+        static void FindMaxScore(double[] score)
+        {
+            double maxScore = 0;
+            foreach (var item in score)
+            {
+                if(item > maxScore){maxScore = item;}
+            }
+            System.Console.WriteLine($"Max Score {maxScore}");
+        }
+
+
+        static void FindMinScore(double[] score)
+        {
+            double minScore = score[0];
+            foreach (var item in score)
+            {
+                if(item < minScore){minScore = item;}
+            }
+            System.Console.WriteLine($"Min Score {minScore}");
+        }
+
 
         static void Main(string[] args)
         {
@@ -120,12 +161,11 @@ namespace MyFirstProject
             string[] status = new string[MAX_REPORTS];
 
             List<string>? x = LoadFile(FILE_PATH);
-            ProcessReports(x ,unitName, reportType, priority, score, status);
-            
-            
-           
-            
-            
+            ProcessReports(x ,unitName, reportType, priority, score, status, out int listLen);
+            CalculateAverage(score, listLen);
+            FindMaxScore(score);
+            FindMinScore(score);
+              
         }
     }
 }
