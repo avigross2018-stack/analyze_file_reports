@@ -29,7 +29,7 @@ namespace MyFirstProject
                 string[] content = File.ReadAllLines(filePath);
                 List<string> splitContent = [.. content];
                 System.Console.WriteLine(splitContent);
-                if(splitContent.Count == 0)
+                if (splitContent.Count == 0)
                 {
                     System.Console.WriteLine("ERROR: Empty file.");
                     return null;
@@ -45,13 +45,13 @@ namespace MyFirstProject
         {
             List<string> cleanData = new List<string>();
             List<string> tempLine = new List<string>();
-            foreach(string line in fileContent)
+            foreach (string line in fileContent)
             {
                 tempLine = [.. line.Split(",")];
-                if(tempLine.Count > 5 || tempLine.Count < 5){continue;}
+                if (tempLine.Count > 5 || tempLine.Count < 5) { continue; }
                 tempLine = tempLine.ConvertAll(x => x.ToLower().Trim());
                 cleanData.Add(string.Join(",", tempLine));
-                
+
             }
             return cleanData;
         }
@@ -70,37 +70,49 @@ namespace MyFirstProject
             List<string> tempLine = new List<string>();
             int index = 0;
             int lineCount = -1;
-            
-            foreach(string line in cleanData)
+
+            foreach (string line in cleanData)
             {
                 lineCount += 1;
                 tempLine = [.. line.Split(",")];
                 string name = tempLine[0];
                 string rep = tempLine[1];
                 string stat = tempLine[4];
-                if(!int.TryParse(tempLine[2], out int pri)){
+                if (!int.TryParse(tempLine[2], out int pri))
+                {
                     System.Console.WriteLine($"Invalid record (Priority not INT), LINE {lineCount}.");
-                    continue;}
+                    continue;
+                }
 
-                if(pri > 5 || pri < 1){
+                if (pri > 5 || pri < 1)
+                {
                     System.Console.WriteLine($"Invalid record (Primary not in range 1-5), LINE {lineCount}.");
-                    continue;}
+                    continue;
+                }
 
-                if(!double.TryParse(tempLine[3], out double sco)){
+                if (!double.TryParse(tempLine[3], out double sco))
+                {
                     System.Console.WriteLine($"Invalid record (Score not Double), LINE {lineCount}.");
-                    continue;}
-                    
-                if(sco > 100.0 || sco < 0.0){
+                    continue;
+                }
+
+                if (sco > 100.0 || sco < 0.0)
+                {
                     System.Console.WriteLine($"Invalid record (Score not in range 0.0-100.0), LINE {lineCount}.");
-                    continue;}
+                    continue;
+                }
 
-                if(!Enum.TryParse(rep, true, out ReportType reportResult)){
+                if (!Enum.TryParse(rep, true, out ReportType reportResult))
+                {
                     System.Console.WriteLine($"Invalid record (Invalid ReportType), LINE {lineCount}.");
-                    continue;}
+                    continue;
+                }
 
-                if(!Enum.TryParse(stat, true, out Status statusResult)){
+                if (!Enum.TryParse(stat, true, out Status statusResult))
+                {
                     System.Console.WriteLine($"Invalid record (Invalid Status), LINE {lineCount}.");
-                    continue;}
+                    continue;
+                }
 
                 unitName[index] = name;
                 reportType[index] = rep.ToLower();
@@ -108,8 +120,8 @@ namespace MyFirstProject
                 score[index] = sco;
                 status[index] = stat.ToLower();
 
-                index ++;
-                
+                index++;
+
             }
             listLen = index;
             System.Console.WriteLine($"{index + 1} processed record Valid.");
@@ -120,7 +132,7 @@ namespace MyFirstProject
                                         int listLen)
         {
             double total = 0;
-            for(int i = 0; i < listLen; i++)
+            for (int i = 0; i < listLen; i++)
             {
                 total += score[i];
             }
@@ -132,9 +144,9 @@ namespace MyFirstProject
         static void FindMaxScore(double[] score, int listLen)
         {
             double maxScore = 0;
-            for(int i = 0; i < listLen; i++)
+            for (int i = 0; i < listLen; i++)
             {
-                if(score[i] > maxScore){maxScore = score[i];}
+                if (score[i] > maxScore) { maxScore = score[i]; }
             }
             System.Console.WriteLine($"Max Score {maxScore}");
         }
@@ -143,9 +155,9 @@ namespace MyFirstProject
         static void FindMinScore(double[] score, int listLen)
         {
             double minScore = score[0];
-            for(int i = 0; i < listLen; i++)
+            for (int i = 0; i < listLen; i++)
             {
-                if(score[i] < minScore){minScore = score[i];}
+                if (score[i] < minScore) { minScore = score[i]; }
             }
             System.Console.WriteLine($"Min Score {minScore}");
         }
@@ -153,27 +165,31 @@ namespace MyFirstProject
 
         static void CountByStatus(string[] status, string statusChoice, int listLen)
         {
-            if(!Enum.TryParse(statusChoice, true, out Status statusResult)){
-                    System.Console.WriteLine($"Invalid Status."); return;}
-            int statusCounter = 0;
-            for(int i = 0; i < listLen; i++)
+            if (!Enum.TryParse(statusChoice, true, out Status statusResult))
             {
-                if(status[i] == null){continue;}
-                if(status[i].Equals(statusChoice.ToLower())){statusCounter += 1;}
+                System.Console.WriteLine($"Invalid Status."); return;
+            }
+            int statusCounter = 0;
+            for (int i = 0; i < listLen; i++)
+            {
+                if (status[i] == null) { continue; }
+                if (status[i].Equals(statusChoice.ToLower())) { statusCounter += 1; }
             }
             System.Console.WriteLine($"Count Status {statusChoice} {statusCounter}");
         }
 
         static void CountByType(string[] reportType, string report, int listLen)
         {
-            if(!Enum.TryParse(report, true, out ReportType reportResult)){
-                    System.Console.WriteLine($"Invalid ReportType.");
-                    return;}
-            int reportCounter = 0;
-            for(int i = 0; i < listLen; i++)
+            if (!Enum.TryParse(report, true, out ReportType reportResult))
             {
-                if(reportType[i] == null){continue;}
-                if(reportType[i].Equals(report.ToLower())){reportCounter += 1;}
+                System.Console.WriteLine($"Invalid ReportType.");
+                return;
+            }
+            int reportCounter = 0;
+            for (int i = 0; i < listLen; i++)
+            {
+                if (reportType[i] == null) { continue; }
+                if (reportType[i].Equals(report.ToLower())) { reportCounter += 1; }
             }
             System.Console.WriteLine($"Count Type {report} {reportCounter}");
 
@@ -206,7 +222,7 @@ namespace MyFirstProject
             CountByType(reportType, "Intel", listLen);
         }
 
-        
+
         static void DisplayHighestPriorityApproved(string[] unitName,
                                 string[] reportType,
                                 int[] priority,
@@ -216,12 +232,12 @@ namespace MyFirstProject
         {
             int pri = 0;
             int reportIndex = 0;
-            for(int i = 0; i < listLen; i++)
+            for (int i = 0; i < listLen; i++)
             {
-                
-                if(status[i] == "approved")
+
+                if (status[i] == "approved")
                 {
-                    if(priority[i] > pri)
+                    if (priority[i] > pri)
                     {
                         pri = priority[i];
                         reportIndex = i;
@@ -243,23 +259,22 @@ namespace MyFirstProject
             double[] scoreTotal = new double[6];
             int[] priorityAmount = new int[6];
 
-            for(int i = 0; i < listLen; i++)
+            for (int i = 0; i < listLen; i++)
             {
                 int p = priority[i];
 
                 scoreTotal[p] += score[i];
                 priorityAmount[p] += 1;
-
             }
             System.Console.WriteLine("== Average By Priority ==");
-            for(int i = 1; i < scoreTotal.Length; i++)
+            for (int i = 1; i < scoreTotal.Length; i++)
             {
-                if(priorityAmount[i] == 0)
+                if (priorityAmount[i] == 0)
                 {
                     System.Console.WriteLine($"Priority {i} avg 0");
                     continue;
                 }
-                    System.Console.WriteLine($"Priority {i} avg {scoreTotal[i] / priorityAmount[i]:F2}");
+                System.Console.WriteLine($"Priority {i} avg {scoreTotal[i] / priorityAmount[i]:F2}");
             }
         }
 
@@ -269,7 +284,6 @@ namespace MyFirstProject
             const int MAX_REPORTS = 100;
             const string FILE_PATH = "reports.txt";
 
-            
             string[] unitName = new string[MAX_REPORTS];
             string[] reportType = new string[MAX_REPORTS];
             int[] priority = new int[MAX_REPORTS]; // 1-5
@@ -277,16 +291,14 @@ namespace MyFirstProject
             string[] status = new string[MAX_REPORTS];
 
             List<string>? x = LoadFile(FILE_PATH);
-            if(x == null){return;}
-            ProcessReports(x ,unitName, reportType, priority, score, status, out int listLen);
+            if (x == null) { return; }
+            ProcessReports(x, unitName, reportType, priority, score, status, out int listLen);
             DisplayBasicStatistics(score, listLen);
             DisplayStatusCounts(status, listLen);
             DisplayTypeCounts(reportType, listLen);
             DisplayHighestPriorityApproved(unitName, reportType, priority, score, status, listLen);
             DisplayAverageByPriority(priority, score, listLen);
-            
-            
-              
+
         }
     }
 }
